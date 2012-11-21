@@ -20,54 +20,192 @@ The views and conclusions contained in the software and documentation are those 
 */
 
 /**
- * plugin setup/install
- */
-register_activation_hook(__FILE__, 'f51_infosys_plugin_activation');
-register_deactivation_hook(__FILE__, 'f51_infosys_plugin_deactivation');
-
-/**
- * setting up hooks
- */
-add_action('wp_footer', 'f51_infosys_wp_footer');
-
-/**
- * handles plugin install settings/options
+ * F51 Infosys Collaboration class
  *
- * @return void
+ * @category
+ * @package
+ * @author Peter <pel@intern1.dk>
  */
-function f51_infosys_plugin_activation()
+class F51InfosysCollaborator
 {
-    if (version_compare(get_bloginfo('version'), '3.4', '<')) {
-        deactivate_plugins(basename(__FILE__));
-    } else {
-        $options = array(
-            'infosys-url'         => 'http://infosys-url/',
-            'authentication-code' => 'Infosys auth code',
-        );
+    /**
+     * method docblock
+     *
+     * @access public
+     * @return void
+     */
+    public function init()
+    {
+        /**
+         * plugin setup/install
+         */
+        register_activation_hook(__FILE__, array($this, 'pluginActivation'));
+        register_deactivation_hook(__FILE__, array($this, 'pluginDeactivation'));
 
-        update_option('f51_infosys_options', $options);
+        /**
+         * setting up hooks
+         */
+        add_action('plugins_loaded', array($this, 'setupHooks'));
+    }
+
+    /**
+     * handles plugin install with default settings/options
+     *
+     * @return void
+     */
+    public function pluginActivation()
+    {
+        if (version_compare(get_bloginfo('version'), '3.4', '<')) {
+            deactivate_plugins(basename(__FILE__));
+        } else {
+            $options = array(
+                'infosys-url'         => 'http://infosys-url/',
+                'authentication-code' => 'Infosys auth code',
+            );
+
+            update_option('f51_infosys_options', $options);
+        }
+    }
+
+    /**
+     * handles plugin uninstall
+     *
+     * @return void
+     */
+    public function pluginDeactivation()
+    {
+        delete_option('f51_infosys_options');
+    }
+
+    /**
+     * hooks
+     */
+
+    /**
+     * sets up various hooks needed for functionality
+     *
+     * @return void
+     */
+    public function setupHooks()
+    {
+        add_action('init', array($this, 'initHook'));
+        if (is_admin()) {
+            add_action('admin_init', array($this, 'adminInitHook'));
+            add_action('admin_menu', array($this, 'adminMenuHook'));
+            add_action('add_meta_boxes', array($this, 'metaBoxHook'));
+        }
+    }
+
+    /**
+     * runs on wp init
+     *
+     * @return void
+     */
+    public function initHook()
+    {
+        // add con activity type as post
+        register_post_type('activity', array(
+//            'capability_type'     => 'activity',
+            'exclude_from_search' => true,
+            'description'         => 'RPG activity',
+            'labels'              => array(
+                'name' => 'RPG Activities',
+                'singular_name' => 'RPG Activity',
+
+            ),
+            'publicly_queryable'  => true,
+            'rewrite' => array(
+                'slug' => 'aktivitet',
+                'with_front' => false,
+
+            ),
+            'show_ui'             => true,
+            'supports'            => array(
+                'custom_fields',
+                'editor',
+                'excerpt',
+                'query_var',
+                'revisions',
+                'title',
+            ),
+        ));
+    }
+
+    /**
+     * adds a meta box for allowing editing of infosys data
+     *
+     * @param object $post Post object representing page viewed
+     *
+     * @access public
+     * @return void
+     */
+    public function metaBoxHook()
+    {
+        add_meta_box(
+            'f51-infosys-meta',
+            'Infosys Collaboration',
+            array($this, 'renderMetaBox'),
+            'activity',
+            'normal',
+            'high'
+        );
+    }
+
+    /**
+     * renders the meta box for editing infosys data
+     *
+     * @param object $post Post object
+     *
+     * @access public
+     * @return void
+     */
+    public function renderMetaBox($post)
+    {
+        echo "hejhej";
+    }
+
+    /**
+     * registers settings and other stuff that needs to
+     * take place during the admin init hook
+     *
+     * @access public
+     * @return void
+     */
+    public function adminInitHook()
+    {
+        register_setting('f51_infosys_options', 'infosys-url');
+        register_setting('f51_infosys_options', 'authentication-code');
+    }
+
+    /**
+     * runs pre admin menu render and adds settings link
+     *
+     * @return void
+     */
+    public function adminMenuHook()
+    {
+        add_options_page(
+            'Infosys Collaboration settings', // title
+            'Infosys Collaboration',          // menu link title
+            'manage_options',
+            'f51_infosys_admin_settings',
+            array($this, 'adminSettingsPage')
+        );
+    }
+
+    /**
+     * method docblock
+     *
+     * @param
+     *
+     * @access public
+     * @return void
+     */
+    public function adminSettingsPage()
+    {
+        require __DIR__ . '/templates/settings_page.phtml';
     }
 }
 
-/**
- * handles plugin install settings/options
- *
- * @return void
- */
-function f51_infosys_plugin_deactivation()
-{
-}
-
-/**
- * hooks
- */
-
-/**
- * called on WP rendering the footer
- *
- * @return void
- */
-function f51_infosys_wp_footer()
-{
-    echo "hehehe ...";
-}
+$f51_infosys_collaborator = new F51InfosysCollaborator();
+$f51_infosys_collaborator->init();
