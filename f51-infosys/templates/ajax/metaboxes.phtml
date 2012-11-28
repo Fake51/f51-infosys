@@ -1,0 +1,103 @@
+<div id="f51-create-activity">
+    <?php if (isset($activity_structure->min_deltagere_per_hold)) : ?>
+        <label for="f51-min_deltagere_per_hold"> <?= $activity_structure->min_deltagere_per_hold->friendly_name;?></label> <input type="text" name="f51-min_deltagere_per_hold" id="f51-min_deltagere_per_hold" value="<?= isset($activity->min_deltagere_per_hold) ? esc_attr($activity->min_deltagere_per_hold) : '';?>"/>
+    <?php endif;?>
+    <?php if (isset($activity_structure->max_deltagere_per_hold)) : ?>
+        <label for="f51-max_deltagere_per_hold"> <?= $activity_structure->max_deltagere_per_hold->friendly_name;?></label> <input type="text" name="f51-max_deltagere_per_hold" id="f51-max_deltagere_per_hold" value="<?= isset($activity->max_deltagere_per_hold) ? esc_attr($activity->max_deltagere_per_hold) : '';?>"/>
+    <?php endif;?>
+    <?php if (isset($activity_structure->spilledere_per_hold)) : ?>
+        <label for="f51-spilledere_per_hold"> <?= $activity_structure->spilledere_per_hold->friendly_name;?></label> <input type="text" name="f51-spilledere_per_hold" id="f51-spilledere_per_hold" value="<?= isset($activity->spilledere_per_hold) ? esc_attr($activity->spilledere_per_hold) : '';?>"/>
+    <?php endif;?>
+    <?php if (isset($activity_structure->varighed_per_afvikling)) : ?>
+        <label for="f51-varighed_per_afvikling"> <?= $activity_structure->varighed_per_afvikling->friendly_name;?></label> <input type="text" name="f51-varighed_per_afvikling" id="f51-varighed_per_afvikling" value="<?= isset($activity->varighed_per_afvikling) ? esc_attr($activity->varighed_per_afvikling) : '';?>"/>
+    <?php endif;?>
+
+
+    <?php if (isset($activity_structure->replayable)) : ?>
+        <label for="f51-replayable"> <?= $activity_structure->replayable->friendly_name;?></label>
+        <select name="f51-replayable" id="f51-replayable">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->replayable->type)) as $value) :?>
+                <option <?= isset($activity->replayable) && $activity->replayable == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->kan_tilmeldes)) : ?>
+        <label for="f51-kan_tilmeldes"> <?= $activity_structure->kan_tilmeldes->friendly_name;?></label>
+        <select name="f51-kan_tilmeldes" id="f51-kan_tilmeldes">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->kan_tilmeldes->type)) as $value) :?>
+                <option <?= isset($activity->kan_tilmeldes) && $activity->kan_tilmeldes == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->lokale_eksklusiv)) : ?>
+        <label for="f51-lokale_eksklusiv"> <?= $activity_structure->lokale_eksklusiv->friendly_name;?></label>
+        <select name="f51-lokale_eksklusiv" id="f51-lokale_eksklusiv">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->lokale_eksklusiv->type)) as $value) :?>
+                <option <?= isset($activity->lokale_eksklusiv) && $activity->lokale_eksklusiv == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->tids_eksklusiv)) : ?>
+        <label for="f51-tids_eksklusiv"> <?= $activity_structure->tids_eksklusiv->friendly_name;?></label>
+        <select name="f51-tids_eksklusiv" id="f51-tids_eksklusiv">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->tids_eksklusiv->type)) as $value) :?>
+                <option <?= isset($activity->tids_eksklusiv) && $activity->tids_eksklusiv == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->type)) : ?>
+        <label for="f51-type"> <?= $activity_structure->type->friendly_name;?></label>
+        <select name="f51-type" id="f51-type">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->type->type)) as $value) :?>
+                <option <?= isset($activity->type) && $activity->type == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->sprog)) : ?>
+        <label for="f51-sprog"> <?= $activity_structure->sprog->friendly_name;?></label>
+        <select name="f51-sprog" id="f51-sprog">
+            <?php foreach (explode('|', str_replace('select:', '', $activity_structure->sprog->type)) as $value) :?>
+                <option <?= isset($activity->sprog) && $activity->sprog == $value ? 'selected="selected" ' : '';?>value="<?= esc_attr($value);?>"><?= esc_html($value);?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->author)) : ?>
+        <label for="f51-author"> <?= $activity_structure->author->friendly_name;?></label> <input name="f51-author" id="f51-author" value="<?= isset($activity->author) ? esc_attr($activity->author) : '';?>"/>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->teaser_dk)) : ?>
+        <label for="f51-teaser_dk"> <?= $activity_structure->teaser_dk->friendly_name;?></label>
+        <textarea name="f51-teaser_dk" id="f51-teaser_dk"><?= isset($activity->teaser_dk) ? esc_html($activity->teaser_dk) : '';?></textarea>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->teaser_en)) : ?>
+        <label for="f51-teaser_en"> <?= $activity_structure->teaser_en->friendly_name;?></label>
+        <textarea name="f51-teaser_en" id="f51-teaser_en"><?= isset($activity->teaser_en) ? esc_html($activity->teaser_en) : '';?></textarea>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->foromtale)) : ?>
+        <label for="f51-foromtale"> <?= $activity_structure->foromtale->friendly_name;?></label>
+        <textarea name="f51-foromtale" id="f51-foromtale"><?= isset($activity->foromtale) ? esc_html($activity->foromtale) : '';?></textarea>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->description_en)) : ?>
+        <label for="f51-description_en"> <?= $activity_structure->description_en->friendly_name;?></label>
+        <textarea name="f51-description_en" id="f51-description_en"><?= isset($activity->description_en) ? esc_html($activity->description_en) : '';?></textarea>
+    <?php endif;?>
+
+    <?php if (isset($activity_structure->note)) : ?>
+        <label for="f51-note"> <?= $activity_structure->note->friendly_name;?></label>
+        <textarea name="f51-note" id="f51-note"><?= isset($activity->note) ? esc_html($activity->note) : '';?></textarea>
+    <?php endif;?>
+
+    <button id="f51-create-activity-submit" type="submit">Opdater</button>
+</div>
+
+
+

@@ -1,0 +1,61 @@
+<div class="f51-container">
+</div>
+<script type="text/javascript">
+jQuery(function() {
+    var $       = jQuery,
+        post_id = <?= $post->ID;?>;
+
+    /**
+     * send ajax request to create activity
+     *
+     * @param Event e Click event triggered
+     *
+     * @return bool
+     */
+    function createActivity(e) {
+        var data = {
+            id: post_id
+        };
+
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (!(data.navn = $('#title').val())) {
+            return false;
+        }
+
+        $('#f51-create-activity').find('input, select, textarea').each(function() {
+            var self = $(this);
+            data[self.attr('name').replace(/f51-/, '')] = self.val();
+        });
+
+        $.ajax({
+            url: '/index.php?f51-ajax=create-activity',
+            type: 'POST',
+            data: data,
+            success: function(data) {
+                var updated;
+                if ($('#f51-updated').length === 0) {
+                    updated = $('<p id="f51-updated">Opdateret</p>');
+
+                    $('div.f51-container').prepend(updated);
+                    window.setTimeout(function() {
+                        updated.remove();
+                    }, 3000);
+                }
+            }
+        });
+
+        return false;
+    }
+
+    $.ajax({
+        url: '/index.php?f51-ajax=activity-structure&f51-activity-id=' + post_id,
+        type: 'GET',
+        success: function(data) {
+            $('div.f51-container').append(data);
+            $('#f51-create-activity-submit').click(createActivity);
+        }
+    });
+});
+</script>
