@@ -224,6 +224,8 @@ class F51InfosysCollaborator
         register_setting('f51_infosys_options', 'infosys-url');
         register_setting('f51_infosys_options', 'authentication-user');
         register_setting('f51_infosys_options', 'authentication-code');
+
+        wp_enqueue_style('f51-stylesheet', plugins_url('f51-infosys/css/f51.css'));
     }
 
     /**
