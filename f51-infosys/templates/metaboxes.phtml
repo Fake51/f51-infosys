@@ -24,6 +24,8 @@ jQuery(function() {
             return false;
         }
 
+        data.foromtale = window.tinymce.activeEditor.getContent();
+
         $('#f51-create-activity').find('input, select, textarea').each(function() {
             var self = $(this);
             data[self.attr('name').replace(/f51-/, '')] = self.val();

@@ -303,8 +303,9 @@ class F51InfosysCollaborator
             throw new Exception('Lacking activity data');
         }
 
-        $data            = $_POST;
-        $data['wp_link'] = $data['id'];
+        $data              = $_POST;
+        $data['wp_link']   = $data['id'];
+        $data['foromtale'] = empty($_POST['foromtale']) ? '' : strip_tags($_POST['foromtale']);
         unset($data['id']);
 
         $connector = $this->getInfosysConnector();
