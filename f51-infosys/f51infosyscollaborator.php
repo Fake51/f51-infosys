@@ -59,7 +59,7 @@ class F51InfosysCollaborator
         if (isset($wp->query_vars['f51-ajax'])) {
             switch($wp->query_vars['f51-ajax']) {
             case 'activity-structure':
-                $this->retrieveActivityStructure(!empty($wp->query_vars['f51-activity-id']) ? $wp->query_vars['f51-activity-id'] : 0);
+                $this->presentActivityAsJSON(!empty($wp->query_vars['f51-activity-id']) ? $wp->query_vars['f51-activity-id'] : 0);
                 exit;
 
             case 'create-activity':
@@ -157,6 +157,10 @@ class F51InfosysCollaborator
                 'slug' => 'aktivitet',
                 'with_front' => false,
 
+            ),
+            'taxonomies'          => array(
+                'category',
+                'post_tag',
             ),
             'show_ui'             => true,
             'supports'            => array(
@@ -281,13 +285,28 @@ class F51InfosysCollaborator
      * @access protected
      * @return void
      */
-    protected function retrieveActivityStructure($activity_id)
+    protected function presentActivityAsJSON($activity_id)
+    {
+        $activity = $this->retrieveActivityStructure($activity_id);
+        require F51_TEMPLATES_DIR . 'ajax/metaboxes.phtml';
+    }
+
+    /**
+     * fetches the activity structure from infosys and
+     * returns it to the ajax request
+     *
+     * @param int $activity_id Optional ID of activity being worked on
+     *
+     * @access public
+     * @return void
+     */
+    public function retrieveActivityStructure($activity_id)
     {
         $connector          = $this->getInfosysConnector();
         $activity_structure = $connector->getActivityStructure();
         $activity           = $connector->findActivity('wp_link', $activity_id);
 
-        require F51_TEMPLATES_DIR . 'ajax/metaboxes.phtml';
+        return $activity;
     }
 
     /**
